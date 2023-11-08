@@ -15,7 +15,7 @@ const MyWaveSurfer = ({ audioSrc }) => {
 
     wavesurfer.load(audioSrc);
 
-    return () => {
+    return () => {  
       wavesurfer.destroy();
     };
   }, [audioSrc]);
