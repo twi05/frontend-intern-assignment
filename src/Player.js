@@ -2,32 +2,42 @@ import React, { useState, useRef, useEffect } from "react";
 import "./style.css";
 import MetaData from "./MetaData";
 import mp4box from "mp4box";
-import WaveSurfer from 'wavesurfer.js'
 import MyWaveSurfer from "./MyWaveSurfer";
+import AudioDetectShower from "./AudioDetectShower";
+import AdvanceMetaData from "./AdvanceMetaData";
+let canvas = null; //intializing canvas
+let ctx = null; //intializing context
 function Player() {
   const [videoSrc, setVideoSrc] = useState(null);
+  //metaData for video
   const [metaData, setMetaData] = useState({
     duration: 0,
     videoWidth: 0,
     videoHeight: 0,
   });
+  //advance MetaData state from mp4box
+  const [advMetaData, setAdvMetaData] = useState("");
+  const [showAdvMetaData, setShowAdvMetaData] = useState(false);
+
+  const [isAudioAvailable, setIsAudioAvailable] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const canvasRef = useRef(null);
   const videoRef = useRef(null);
   const buttonRef = useRef(null);
   const canvasWidth = 640;
   const canvasHeight = 360;
-  let canvas = null;
-  let ctx = null;
 
-  const handleVideoSelect = (e) => {
-    const file = e.target.files[0];
+  const handleVideoSelect = async (e) => {
+    setVideoSrc(null);
+    setIsAudioAvailable(null);
+    const file = e.target.files[0]; //taking file input
     if (file) {
       setVideoSrc(URL.createObjectURL(file));
-      const video = document.createElement("video");
+      //creating video element
+      const video = document.createElement("video"); 
       video.src = URL.createObjectURL(file);
 
-      //triggred when video metadata is loaded
+      //triggered when video metadata is loaded
       video.onloadedmetadata = () => {
         setMetaData((metaData) => {
           return {
@@ -38,19 +48,31 @@ function Player() {
           };
         });
       };
-      const buffer =  file.arrayBuffer();
-      buffer.fileStart = 0; // https://github.com/gpac/mp4box.js/blob/master/README.md#appendbufferdata
-      const mp4boxfile = mp4box.createFile();
-      mp4boxfile.onReady = (info) => {
-        console.log("onReady");
-        // setMetaData(JSON.stringify(info, null, 2));
-        console.log(info);
 
-        // getCodec(info);
-      };
+      try {
+        //converting file to array buffer
+        const buffer = await file.arrayBuffer();
+        buffer.fileStart = 0;
+        const mp4boxfile = mp4box.createFile();
+        mp4boxfile.onReady = (info) => {
+          console.log("onReady");
+          setAdvMetaData(JSON.stringify(info, null, 2));
+          
+          //checking from advance metadata, audiotracks available or not
+          if (info.audioTracks && info.audioTracks.length) {
+            console.log("in true audiotracks");
+            setIsAudioAvailable(true);
+          } else {
+            setIsAudioAvailable(false);
+          }
+        };
+        mp4boxfile.onError = (error) => console.log(error);
+        mp4boxfile.appendBuffer(buffer);
+      } catch (err) {
+        console.warn(err);
+      }
     }
   };
-  // a function to handle play pause of video
   const handlePlayPause = () => {
     if (videoRef.current) {
       if (isPlaying) {
@@ -61,8 +83,9 @@ function Player() {
       setIsPlaying((isPlaying) => !isPlaying);
     }
   };
+
   useEffect(() => {
-    buttonRef.current.textContent = "Please upload video to see here";
+    buttonRef.current.textContent = "Please Input video to see here";
     buttonRef.current.disabled = true;
   }, []);
 
@@ -88,17 +111,16 @@ function Player() {
   return (
     <div className="App">
       <div className="main">
-
         <input
           type="file"
           accept="video/*"
           className="input-file"
-          id="fileInput" 
+          id="fileInput"
           // add an id to link the label and the input
           onChange={handleVideoSelect}
         />
-        <label htmlFor="fileInput" className="custom-upload-button">
-          Upload Video
+        <label htmlFor="fileInput" className="button">
+          Input Video
         </label>
         <div
           className="canvas-meta"
@@ -115,36 +137,41 @@ function Player() {
           <video
             ref={videoRef}
             src={videoSrc}
-            controls={false}
+            controls={true}
             style={{ display: "none" }}
+            muted
+            
           />
           <button
             onClick={handlePlayPause}
             ref={buttonRef}
-            className="btn"
+            className="btn button"
             style={{
               position: "absolute",
               top: canvasHeight / 2,
               left: canvasWidth / 2,
               transform: "translate(-50%, -50%)",
               zIndex: 1,
-              backgroundColor: "#b7f564",
-              color: "black",
-              padding: "10px 20px",
-              border: "none",
-              cursor: "pointer",
-              borderRadius:"6px"
             }}
           >
             {isPlaying ? "Pause" : "Play"}
           </button>
-          <MetaData metaData={metaData} />
-
+          <MetaData
+            metaData={metaData}
+            advMetaData={advMetaData}
+            setShowAdvMetaData={setShowAdvMetaData}
+            showAdvMetaData={showAdvMetaData}
+          />
         </div>
-          <MyWaveSurfer audioSrc={videoSrc}/>
+        <MyWaveSurfer audioSrc={videoSrc} isAudioAvailable={isAudioAvailable} isPlaying={isPlaying}/>
+        {videoSrc && <AudioDetectShower isAudioAvailable={isAudioAvailable} />}
+        {showAdvMetaData && (
+          <AdvanceMetaData advMetaData={advMetaData} />
+        )}
       </div>
     </div>
   );
 }
 
 export default Player;
+
