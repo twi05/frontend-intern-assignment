@@ -1,70 +1,69 @@
-# Getting Started with Create React App
+# Frontend Internship Assignment Documentation
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Video Player with ReactJS and HTML5 Canvas
 
-## Available Scripts
+### Overview
 
-In the project directory, you can run:
+This repository contains a ReactJS-based Video Player that utilizes HTML5 Canvas for rendering video and audio features. The assignment is divided into two parts, each focusing on different functionalities.
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Part 1: Video Player Implementation
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. **Take video file as an input:**
+   - Users can input a video file through the provided UI.
 
-### `npm test`
+2. **Display video metadata:**
+   - Display video metadata, including duration, on the user interface.
+    -Additions: 
+        -Used Mp4Box npm-module to convert video file to blob and read that file to get more advanced meta-data like codec, audiotracks, videotracks. 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+3. **Display video on the screen:**
+   - Render the selected video on the screen using the HTML5 Canvas element.
 
-### `npm run build`
+4. **Play/Pause functionality:**
+   - Implement a play/pause button in the middle of the video container.
+   - The video should play or pause on clicking the button.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Part 2: Audio Detection and Waveform Display
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+1. **Detect audio presence:**
+   - Ensure the uploaded video has audio before allowing the upload.
+   - Converted video file to binary data(blob) and got audio tracks data that helped detect audio. 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+2. **Display audio waveform:**
+   - If audio is present, display the waveform in a box below the video.
+   - Used wavesurfer.js options and events inorder to play it with sync of video. 
 
-### `npm run eject`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Implementation Notes
+- Host the code on a platform like Vercel: https://twinshu-vidyoai.vercel.app/
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### My Implementation
+----------------------------------------------
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Getting Started
 
-## Learn More
+1. Clone the repository:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+   ```bash
+   git clone https://github.com/your-username/frontend-internship-assignment.git
+   ```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+2. Navigate to the project directory:
 
-### Code Splitting
+   ```bash
+   cd frontend-internship-assignment
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+3. Install dependencies:
 
-### Analyzing the Bundle Size
+   ```bash
+   npm install
+   ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+4. Run the development server:
 
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+   ```bash
+   npm start
+   ```
