@@ -5,6 +5,8 @@ import mp4box from "mp4box";
 import MyWaveSurfer from "./MyWaveSurfer";
 import AudioDetectShower from "./AudioDetectShower";
 import AdvanceMetaData from "./AdvanceMetaData";
+import toast, { Toaster } from "react-hot-toast";
+const notify = () => toast("Upload only mp4 file!");
 let canvas = null; //intializing canvas
 let ctx = null; //intializing context
 function Player() {
@@ -22,7 +24,7 @@ function Player() {
   const buttonRef = useRef(null);
   const canvasWidth = 640;
   const canvasHeight = 360;
-
+  const [loading, setLoading] = useState(false);
   const handleVideoSelect = async (e) => {
     setVideoSrc(null);
     setIsAudioAvailable(null);
@@ -35,6 +37,49 @@ function Player() {
 
       //triggered when video metadata is loaded
       video.onloadedmetadata = () => {
+        setLoading(true);
+
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const source = audioContext.createMediaElementSource(video);
+        const analyser = audioContext.createAnalyser();
+
+        const gainNode = audioContext.createGain();
+
+        gainNode.gain.value = 0;
+
+        source.connect(analyser);
+        analyser.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        analyser.fftSize = 2048;
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+        let isAudioAvailable = false;
+
+        function hasAudio() {
+          analyser.getByteFrequencyData(dataArray);
+          const sum = dataArray.reduce((a, value) => a + value, 0);
+          return sum > 0;
+        }
+        video.addEventListener("timeupdate", () => {
+          if (!isAudioAvailable) {
+            if (hasAudio()) {
+              console.log("video has audio");
+              buttonRef.current.disabled = false;
+              //change button text based on video state
+              buttonRef.current.textContent = "Play";
+              isAudioAvailable = true;
+            } else {
+              buttonRef.current.textContent =
+                "Can't Upload, Video does'nt have audio";
+              console.log("video doesn't have audio");
+            }
+          }
+        });
+
+        setLoading(false);
+        video.play();
+
         setMetaData((metaData) => {
           return {
             ...metaData,
@@ -115,6 +160,8 @@ function Player() {
   return (
     <div className="App">
       <div className="main">
+      {loading && <div className="loader-wrapper"><div className="loader  "></div></div> }
+        <Toaster />
         <input
           type="file"
           accept="video/*"
@@ -122,6 +169,7 @@ function Player() {
           id="fileInput"
           // add an id to link the label and the input
           onChange={handleVideoSelect}
+          onClick={notify}
         />
         <label htmlFor="fileInput" className="button">
           Input Video
