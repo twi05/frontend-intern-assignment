@@ -14,8 +14,6 @@ This repository contains a ReactJS-based Video Player that utilizes HTML5 Canvas
 
 2. **Display video metadata:**
    - Display video metadata, including duration, on the user interface.
-    -Additions: 
-        -Used Mp4Box npm-module to convert video file to blob and read that file to get more advanced meta-data like codec, audiotracks, videotracks. 
 
 3. **Display video on the screen:**
    - Render the selected video on the screen using the HTML5 Canvas element.
@@ -28,7 +26,6 @@ This repository contains a ReactJS-based Video Player that utilizes HTML5 Canvas
 
 1. **Detect audio presence:**
    - Ensure the uploaded video has audio before allowing the upload.
-   - Converted video file to binary data(blob) and got audio tracks data that helped detect audio. 
 
 2. **Display audio waveform:**
    - If audio is present, display the waveform in a box below the video.
@@ -40,7 +37,8 @@ This repository contains a ReactJS-based Video Player that utilizes HTML5 Canvas
 
 ### My Implementation
 ----------------------------------------------
-
+![Relative Path Image](public/app_ss.png)
+![Relative Path Image](public/app_ss2.png)
 
 ### Getting Started
 
