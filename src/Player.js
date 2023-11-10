@@ -9,12 +9,8 @@ let canvas = null; //intializing canvas
 let ctx = null; //intializing context
 function Player() {
   const [videoSrc, setVideoSrc] = useState(null);
-  //metaData for video
-  const [metaData, setMetaData] = useState({
-    duration: 0,
-    videoWidth: 0,
-    videoHeight: 0,
-  });
+  //metaData for video, intializing with object.
+  const [metaData, setMetaData] = useState({});
   //advance MetaData state from mp4box
   const [advMetaData, setAdvMetaData] = useState("");
   const [showAdvMetaData, setShowAdvMetaData] = useState(false);
@@ -45,6 +41,11 @@ function Player() {
             duration: video.duration,
             videoWidth: video.videoWidth,
             videoHeight: video.videoHeight,
+            fileName:file.name,
+            fileSize:file.size,
+            fileType:file.type,
+            lastModifiedDate: file.lastModifiedDate,
+            lastModified: file.lastModified,
           };
         });
       };
@@ -90,13 +91,15 @@ function Player() {
   }, []);
 
   useEffect(() => {
+    //create canvas ref
     canvas = canvasRef.current;
     ctx = canvas.getContext("2d");
     if (!canvas || !videoRef.current) return;
     if (videoSrc) {
       buttonRef.current.disabled = false;
-      buttonRef.current.textContent = "Play";
-
+      //change button text based on video state
+      buttonRef.current.textContent = "Play"; 
+      //videoref event listener on play
       videoRef.current.addEventListener("play", () => {
         const drawFrame = () => {
           if (!videoRef.current.paused && !videoRef.current.ended) {
@@ -108,6 +111,7 @@ function Player() {
       });
     }
   }, [videoSrc]);
+
   return (
     <div className="App">
       <div className="main">

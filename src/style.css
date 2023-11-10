@@ -4,16 +4,38 @@
   font-family: sans-serif;
 }
 .App {
-  height: 100vh;
-  width: 100vw;
-  background: #a02c80;
+  min-height: 100vh;
+  background: hsla(317, 100%, 50%, 1);
+
+  background: radial-gradient(
+    circle,
+    hsla(317, 100%, 50%, 1) 50%,
+    hsla(317, 57%, 40%, 1) 100%
+  );
+
+  background: -moz-radial-gradient(
+    circle,
+    hsla(317, 100%, 50%, 1) 50%,
+    hsla(317, 57%, 40%, 1) 100%
+  );
+
+  background: -webkit-radial-gradient(
+    circle,
+    hsla(317, 100%, 50%, 1) 50%,
+    hsla(317, 57%, 40%, 1) 100%
+  );
+
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr="#FF00B7", endColorstr="#A02C80", GradientType=1 );
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 .main {
-  height: 100vh;
+  /* min-height: fit-content; */
   width: 70vw;
-
   margin: 0 auto;
-  background: #ff00b7;
+
   display: flex;
   justify-content: center;
   flex-direction: column;
@@ -23,7 +45,6 @@
 .canvas-meta {
   display: flex;
   gap: 0 1rem;
-  
 }
 .meta-data {
   border: 2px solid white;
@@ -32,14 +53,14 @@
   align-self: center;
   color: white;
   min-width: 15rem;
-  border-radius: 6px ;
+  border-radius: 6px;
 }
-.meta-data>h2 {
+.meta-data > h2 {
   text-align: center;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   text-decoration: underline;
 }
-.meta-data>p {
+.meta-data > p {
   text-align: center;
   margin-top: 0.5rem;
 }
@@ -52,39 +73,63 @@
 
 #myCanvas {
   background: hsl(0, 0%, 2%);
-  border-radius: 6px; 
+  border-radius: 6px;
 }
 
 .waveform {
-}
-
-.btn {
+  width: 80%;
+  height: 8rem;
+  text-align: center;
+  border: 2px solid white;
+  font-size: large;
+  border-radius: 6px;
+  color: white;
 }
 
 .input-file {
   display: none; /* Hide the input element */
 }
 
-.custom-upload-button {
+.button {
   background-color: #b7f564;
   color: black;
   padding: 10px 20px;
   border: none;
-  border-radius: 6px  ;
+  border-radius: 6px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.1s;
 }
 
-.custom-upload-button:hover {
+.button:hover {
   background-color: #a3f03f;
+  scale: 1.01;
 }
 
+.more-metadata {
+  margin-top: 2rem;
+}
 
-@media screen and (max-width: 1000px) { 
+@media screen and (max-width: 1000px) {
   .canvas-meta {
     flex-direction: column;
     gap: 2rem 1rem;
-    
   }
-  
+}
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.adv-meta-data {
+  border: 2px solid white;
+  border-radius: 6px;
+  padding: 2rem;
+  color: white;
+}
+
+.audio-detail {
+  color: white;
 }

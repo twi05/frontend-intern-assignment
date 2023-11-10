@@ -8,7 +8,7 @@ const MyWaveSurfer = ({ audioSrc, isAudioAvailable = false, isPlaying }) => {
   useEffect(() => {
     try {
       //check audio is uploaded, and video has audio detected
-  //(as we can only show audio once it has video)
+      //(as we can only show audio once it has video)
       if (audioSrc && isAudioAvailable) {
         //create wavesurfer object
         wavesurfer = WaveSurfer.create({
@@ -35,8 +35,7 @@ const MyWaveSurfer = ({ audioSrc, isAudioAvailable = false, isPlaying }) => {
   }, [audioSrc, isAudioAvailable]);
 
   useEffect(() => {
-    console.log("playing? ", isPlaying);
-    console.log(wavesurfer);
+    //play wave surfer, if wavesurfer is true.
     if (wavesurfer) {
       if (isPlaying) wavesurfer.play();
       else wavesurfer.pause();
@@ -47,7 +46,6 @@ const MyWaveSurfer = ({ audioSrc, isAudioAvailable = false, isPlaying }) => {
     <>
       <div className="waveform" ref={waveformRef}>
         {!audioSrc && <div className="">Input video to see waveform</div>}
-
         {audioSrc && !isAudioAvailable ? (
           <p>Unable to show waveform, As audio is not available!</p>
         ) : null}
